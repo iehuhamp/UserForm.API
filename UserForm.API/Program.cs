@@ -11,7 +11,7 @@ using UserForm.DAL.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AssignmentSupportDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
 var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();

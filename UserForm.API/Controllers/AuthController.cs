@@ -24,25 +24,32 @@ namespace UserForm.API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterRequest req)
         {
-            if (req.Password != req.ConfirmPassword)
-                return BadRequest("Mật khẩu xác nhận không khớp.");
-
-            var existing = await _userService.GetByEmailAsync(req.Email);
-            if (existing != null)
-                return Conflict("Email đã tồn tại.");
-
-            var user = new User
+            try
             {
-                StudentId = req.StudentID,
-                StudentName = req.StudentName,
-                Email = req.Email,
-                CampusId = req.CampusId,
-                RoleId = 4, // Default role: User
-                IsActive = true
-            };
+                if (req.Password != req.ConfirmPassword)
+                    return BadRequest("Mật khẩu xác nhận không khớp.");
 
-            await _userService.RegisterAsync(user, req.Password);
-            return Ok("Đăng ký thành công!");
+                var existing = await _userService.GetByEmailAsync(req.Email);
+                if (existing != null)
+                    return Conflict("Email đã tồn tại.");
+
+                var user = new User
+                {
+                    StudentId = req.StudentID,
+                    StudentName = req.StudentName,
+                    Email = req.Email,
+                    CampusId = req.CampusId,
+                    RoleId = 4, // Default role: User
+                    IsActive = true
+                };
+
+                await _userService.RegisterAsync(user, req.Password);
+                return Ok("Đăng ký thành công!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Lỗi khi đăng ký: {ex.Message}");
+            }
         }
 
 

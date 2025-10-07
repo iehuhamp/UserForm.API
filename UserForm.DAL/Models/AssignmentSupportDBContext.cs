@@ -67,7 +67,7 @@ public partial class AssignmentSupportDBContext : DbContext
 
             entity.HasIndex(e => e.CampusCode, "UQ__Campuses__4D8A9715BD74B188").IsUnique();
 
-            entity.Property(e => e.CampusId).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CampusId).HasDefaultValueSql("gen_random_uuid()");
             entity.Property(e => e.CampusCode)
                 .IsRequired()
                 .HasMaxLength(10);
@@ -92,7 +92,7 @@ public partial class AssignmentSupportDBContext : DbContext
 
             entity.HasIndex(e => e.UserId, "IX_Form_User");
 
-            entity.Property(e => e.FormId).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.FormId).HasDefaultValueSql("gen_random_uuid()");
             entity.Property(e => e.AdminNotes).HasMaxLength(1000);
             entity.Property(e => e.ApprovedAt).HasPrecision(0);
             entity.Property(e => e.CourseCode)
@@ -103,7 +103,7 @@ public partial class AssignmentSupportDBContext : DbContext
             entity.Property(e => e.RejectedAt).HasPrecision(0);
             entity.Property(e => e.SubmittedAt)
                 .HasPrecision(0)
-                .HasDefaultValueSql("(sysutcdatetime())");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.SupportCode).HasMaxLength(50);
 
             entity.HasOne(d => d.ApprovedByUser).WithMany(p => p.FormRegisterServiceApprovedByUsers)
@@ -164,7 +164,7 @@ public partial class AssignmentSupportDBContext : DbContext
             entity.Property(e => e.ChangeNote).HasMaxLength(1000);
             entity.Property(e => e.ChangedAt)
                 .HasPrecision(0)
-                .HasDefaultValueSql("(sysutcdatetime())");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             entity.HasOne(d => d.ChangedByUser).WithMany(p => p.FormStatusHistories)
                 .HasForeignKey(d => d.ChangedByUserId)
@@ -192,10 +192,10 @@ public partial class AssignmentSupportDBContext : DbContext
 
             entity.HasIndex(e => e.FormId, "IX_Invoices_Form");
 
-            entity.Property(e => e.InvoiceId).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.InvoiceId).HasDefaultValueSql("gen_random_uuid()");
             entity.Property(e => e.CreatedAt)
                 .HasPrecision(0)
-                .HasDefaultValueSql("(sysutcdatetime())");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.Currency)
                 .IsRequired()
                 .HasMaxLength(10)
@@ -205,7 +205,7 @@ public partial class AssignmentSupportDBContext : DbContext
             entity.Property(e => e.PaymentRef).HasMaxLength(100);
             entity.Property(e => e.Subtotal).HasColumnType("decimal(12, 2)");
             entity.Property(e => e.TotalAmount)
-                .HasComputedColumnSql("([Subtotal]-[DiscountAmount])", true)
+                .HasComputedColumnSql("(\"Subtotal\"-\"DiscountAmount\")", true)
                 .HasColumnType("decimal(13, 2)");
 
             entity.HasOne(d => d.Form).WithMany(p => p.Invoices)
@@ -232,7 +232,7 @@ public partial class AssignmentSupportDBContext : DbContext
                 .IsRequired()
                 .HasMaxLength(200);
             entity.Property(e => e.LineTotal)
-                .HasComputedColumnSql("([Qty]*[UnitPrice])", true)
+                .HasComputedColumnSql("(\"Qty\"*\"UnitPrice\")", true)
                 .HasColumnType("decimal(23, 2)");
             entity.Property(e => e.Qty).HasDefaultValue(1);
             entity.Property(e => e.UnitPrice).HasColumnType("decimal(12, 2)");
@@ -253,7 +253,7 @@ public partial class AssignmentSupportDBContext : DbContext
 
             entity.HasIndex(e => e.ToUserId, "IX_Notif_User");
 
-            entity.Property(e => e.NotificationId).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.NotificationId).HasDefaultValueSql("gen_random_uuid()");
             entity.Property(e => e.Body).IsRequired();
             entity.Property(e => e.DeliveryChannel)
                 .IsRequired()
@@ -261,7 +261,7 @@ public partial class AssignmentSupportDBContext : DbContext
                 .HasDefaultValue("IN_APP");
             entity.Property(e => e.SentAt)
                 .HasPrecision(0)
-                .HasDefaultValueSql("(sysutcdatetime())");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.Subject)
                 .IsRequired()
                 .HasMaxLength(200);
@@ -326,7 +326,7 @@ public partial class AssignmentSupportDBContext : DbContext
 
             entity.HasIndex(e => e.ServiceCode, "UQ__Services__A01D74C9B896996F").IsUnique();
 
-            entity.Property(e => e.ServiceId).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.ServiceId).HasDefaultValueSql("gen_random_uuid()");
             entity.Property(e => e.ServiceCode)
                 .IsRequired()
                 .HasMaxLength(20);
@@ -342,13 +342,13 @@ public partial class AssignmentSupportDBContext : DbContext
 
             entity.HasIndex(e => e.FormId, "IX_SS_Form");
 
-            entity.Property(e => e.SupportSessionId).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.SupportSessionId).HasDefaultValueSql("gen_random_uuid()");
             entity.Property(e => e.EndedAt).HasPrecision(0);
             entity.Property(e => e.OutcomeCode).HasMaxLength(20);
             entity.Property(e => e.OutcomeNote).HasMaxLength(1000);
             entity.Property(e => e.StartedAt)
                 .HasPrecision(0)
-                .HasDefaultValueSql("(sysutcdatetime())");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             entity.HasOne(d => d.AdminUser).WithMany(p => p.SupportSessions)
                 .HasForeignKey(d => d.AdminUserId)
@@ -373,10 +373,10 @@ public partial class AssignmentSupportDBContext : DbContext
 
             entity.HasIndex(e => e.StudentId, "UQ_Users_StudentID").IsUnique();
 
-            entity.Property(e => e.UserId).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.UserId).HasDefaultValueSql("gen_random_uuid()");
             entity.Property(e => e.CreatedAt)
                 .HasPrecision(0)
-                .HasDefaultValueSql("(sysutcdatetime())");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
             entity.Property(e => e.Email)
                 .IsRequired()
                 .HasMaxLength(255);
@@ -391,7 +391,7 @@ public partial class AssignmentSupportDBContext : DbContext
                 .HasMaxLength(150);
             entity.Property(e => e.UpdatedAt)
                 .HasPrecision(0)
-                .HasDefaultValueSql("(sysutcdatetime())");
+                .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
             entity.HasOne(d => d.Campus).WithMany(p => p.Users)
                 .HasForeignKey(d => d.CampusId)
